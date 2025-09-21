@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Protected_prog VERSION 0.1 LANGUAGES CXX)
+project(Protected_prog VERSION 0.1 LANGUAGES C CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -23,7 +23,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Protected_prog
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        sqlite3.h
+        sqlite3.c
+
+
+
+
     )
+set_source_files_properties(sqlite3.c PROPERTIES LANGUAGE C)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Protected_prog APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

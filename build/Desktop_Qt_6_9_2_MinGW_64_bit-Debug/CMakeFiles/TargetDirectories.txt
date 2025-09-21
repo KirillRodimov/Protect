@@ -1,9 +1,0 @@
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/Protected_prog.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/install.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/Protected_prog_autogen_timestamp_deps.dir
-C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/Protected_prog_autogen.dir
