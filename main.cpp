@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QSettings>
 #include <stdio.h>
 #include <iostream>
@@ -16,7 +17,15 @@ extern "C"
 
 //C:\Anvil\Proj_qt\Protected_prog
 
-class User
+int set_user(sqlite3 *db, User *user);
+int callback(void *notUsed, int colCount, char **columns, char **colNames);
+int get_user (sqlite3 *db, int id, User *p_user);
+int read_cfg(string *bios);
+int write_cfg(string *bios);
+void read_MachineGuide(string *bios);
+int linking_computer(int* argc, char** argv);
+
+/*class User
 {
 public:
     int id;
@@ -51,7 +60,7 @@ public:
         cout << "User " << name << " deleted" << endl;
     }
 };
-
+*/
 int set_user(sqlite3 *db, User *user)
 {
     char *err = 0;
@@ -164,6 +173,7 @@ int linking_computer(int* argc, char** argv)
     return 0;
 }
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -187,6 +197,7 @@ int main(int argc, char *argv[])
     }
     MainWindow w;
     w.show();
+
     sqlite3 *db;    // указатель на базу данных
     char *err = 0; //сообщение об ошибке
     // открываем подключение к базе данных
