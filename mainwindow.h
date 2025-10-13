@@ -19,6 +19,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+extern sqlite3 *db;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -75,8 +77,12 @@ public:
 
 int set_user(sqlite3 *db, User *user);
 int callback(void *notUsed, int colCount, char **columns, char **colNames);
+int callback_pas(void *notUsed, int colCount, char **columns, char **colNames);
 int get_user (sqlite3 *db, int id, User *p_user);
 int read_cfg(string *bios);
 int write_cfg(string *bios);
 void read_MachineGuide(string *bios);
 int linking_computer(int* argc, char** argv);
+
+int get_login (sqlite3 *db, int login, User *p_user);
+int check_pass (sqlite3 *db, int login, User *p_user);

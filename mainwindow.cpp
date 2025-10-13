@@ -56,6 +56,27 @@ void MainWindow::on_EnterButton_clicked()
         return;
     }
     cout << Tlog.toStdString() << " login " << Tpas.toStdString() << " Pas" << endl;
+    User Euser;
+    string password = "";
+    int rc = 0;
+    cout << "rc = " << rc << endl;
+    Euser.id = -1;
+    Euser.log = Tlog.toInt();
+    Euser.pas = Tpas.toStdString();
+    password = Euser.pas;
+    rc = check_pass(db, Euser.log, &Euser);
+    cout << "rc = " << rc << " password "<< password << " Euser.pas " << Euser.pas << endl;
+    if (rc == 1)
+    {
+        QMessageBox::warning(this, "Ошибка ввода", "Неверные данные");
+        return;
+    }
+    else
+    {
+        QMessageBox::information(this, "Успех", "Вы успешно вошли");
+    }
+    cout << "id = " << Euser.id << endl;
+    return;
 }
 
 
@@ -82,5 +103,28 @@ void MainWindow::on_RegInButton_clicked()
         return;
     }
     cout << TRlog.toStdString() << " login " << TRpas.toStdString() << " Pas " << TRname.toStdString() << " name " << TRphone.toStdString() << " Phone " << TRadr.toStdString() << " adr " << endl;
+    User Ruser;
+    int rc = 0;
+    cout << "rc = " << rc << endl;
+    Ruser.id = -1;
+    Ruser.log = TRlog.toInt();
+    Ruser.pas = TRpas.toStdString();
+    Ruser.name = TRname.toStdString();
+    Ruser.phone = TRphone.toInt();
+    Ruser.adr = TRadr.toStdString();
+    rc = get_login(db, Ruser.log, &Ruser);
+    cout << "id = " << Ruser.id << endl;
+    if (rc == 0)
+    {
+        set_user(db, &Ruser);
+        cout << "User putted in base" << endl;
+        QMessageBox::information(this, "Успех", "Вы успешно зарегестрировались");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка ввода", "Пользователь с таким логином уже существует!");
+        return;
+    }
+    cout << "id = " << Ruser.id << endl;
 }
 

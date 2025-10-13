@@ -87,9 +87,16 @@ int set_user(sqlite3 *db, User *user)
 int callback(void *notUsed, int colCount, char **columns, char **colNames)
 {
     User* p_user = static_cast<User*>(notUsed);
-    p_user->name =columns[0];
+    p_user->id = atoi(columns[0]);
     return 0;
 };
+
+int callback_pas(void *notUsed, int colCount, char **columns, char **colNames)
+{
+    User* p_user = static_cast<User*>(notUsed);
+    p_user->pas = columns[0];
+    return 0;
+}
 
  int get_user (sqlite3 *db, int id, User *p_user)
 {
@@ -107,6 +114,50 @@ int callback(void *notUsed, int colCount, char **columns, char **colNames)
         return rc;
     }
     return rc;
+};
+
+int check_pass (sqlite3 *db, int login, User *p_user)
+{
+    char *err = 0;
+    int rc = 0;
+    // получаем все данные из таблицы people
+    char buf[1024];
+    snprintf(buf, sizeof(buf),"SELECT id FROM Users WHERE login = %d AND password = %s", login, p_user->pas.c_str());
+    char *sel = buf;
+    rc = sqlite3_exec(db, sel, callback,(void*) p_user, &err);
+    if (rc != SQLITE_OK )
+    {
+        //printf("SQL error: %s\n", err);
+        cout << "SQL error: " << err <<endl;
+        return -1;
+    }
+    if (p_user->id == -1)
+    {
+        return 1;
+    }
+    return 0;
+};
+
+
+int get_login (sqlite3 *db, int login, User *p_user)
+{
+    char *err = 0;
+    int rc = 0;
+    // получаем все данные из таблицы people
+    char buf[1024];
+    snprintf(buf, sizeof(buf),"SELECT id FROM Users WHERE login = %d", login );
+    char *sel = buf;
+    rc = sqlite3_exec(db, sel, callback,(void*) p_user, &err);
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: " << err <<endl;
+        return -1;
+    }
+    if (p_user->id == -1)
+    {
+        return 0;
+    }
+    return 1;
 };
 
 int read_cfg(string *bios)
@@ -173,6 +224,7 @@ int linking_computer(int* argc, char** argv)
     return 0;
 }
 
+sqlite3 *db;
 
 int main(int argc, char *argv[])
 {
@@ -198,7 +250,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    sqlite3 *db;    // указатель на базу данных
+   // sqlite3 *db;    // указатель на базу данных
     char *err = 0; //сообщение об ошибке
     // открываем подключение к базе данных
     int rc  = sqlite3_open("test.db", &db);
@@ -223,9 +275,10 @@ int main(int argc, char *argv[])
 
     //printf("TABLE CREATED\n");
     cout << "TABLE CREATED" << endl;
+    /*
     User first;
-    first.name = "AA BB";
-    //first->name = "AA BB";
+    //first.name = "AA BB";
+    first->name = "AA BB";
     rc = set_user(db, &first);
     if (rc != SQLITE_OK)
     {
@@ -256,7 +309,7 @@ int main(int argc, char *argv[])
     read_MachineGuide(&val);
     write_cfg(&val);
     cout << "val after read MACHINEGUIDE " << val << endl;
-
+    */
     //----------------
     return a.exec();
 }
