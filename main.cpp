@@ -18,6 +18,7 @@ extern "C"
 
 int set_user(sqlite3 *db, User *user)
 {
+
     char *err = 0;
     int rc = 0;
     // добавляем строку в таблицу Users
