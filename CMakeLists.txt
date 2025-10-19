@@ -25,6 +25,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         sqlite3.h
         sqlite3.c
+        img.qrc
+        ../../../Users/Dante/Downloads/wp.jpg
 
 
 

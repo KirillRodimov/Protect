@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>good.png</file>
+        <file>wp.jpg</file>
+    </qresource>
+</RCC>

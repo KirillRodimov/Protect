@@ -74,6 +74,7 @@ void MainWindow::on_EnterButton_clicked()
     else
     {
         QMessageBox::information(this, "Успех", "Вы успешно вошли");
+        ui->stackedWidget->setCurrentIndex(2);
     }
     cout << "id = " << Euser.id << endl;
     return;
@@ -119,6 +120,7 @@ void MainWindow::on_RegInButton_clicked()
         set_user(db, &Ruser);
         cout << "User putted in base" << endl;
         QMessageBox::information(this, "Успех", "Вы успешно зарегестрировались");
+        ui->stackedWidget->setCurrentIndex(2);
     }
     else
     {
