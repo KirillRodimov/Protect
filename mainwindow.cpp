@@ -4,12 +4,16 @@
 #include <QMessageBox>
 #include <QIntValidator>
 using namespace std;
-
+int counter = 0;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->AdmEdit->hide();
+    ui->adminLabel->hide();
+    ui->Runbut->hide();
 
     ui->stackedWidget->setCurrentIndex(0);
     connect(ui->RegButton, &QPushButton::clicked, this, [=](){
@@ -33,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->RPhoneEdit->setValidator(new QIntValidator(0, INT_MAX, this));
     QRegularExpression re("[A-Za-zА-Яа-яЁё]*");
     ui->RNameEdit->setValidator(new QRegularExpressionValidator(re,this));
+
+    ui->FNameEdit->setValidator(new QRegularExpressionValidator(re,this));
+
 }
 
 MainWindow::~MainWindow()
@@ -44,13 +51,13 @@ void MainWindow::on_EnterButton_clicked()
 {
     cout << "EnterButton Clicked " << endl;
     QString Tlog = ui->LogEdit->text();
-    QString Tpas = ui->PasEdit->text();
+    QString Tpas = generate_hash(ui->PasEdit->text().toStdString());
     if (Tlog.length() != 4)
     {
         QMessageBox::warning(this, "Ошибка ввода", "Логин должен содержать 4 цифры!");
         return;
     }
-    if (Tpas.length() != 6 || Tpas.isEmpty())
+    if (ui->PasEdit->text().length() != 6 || Tpas.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Пароль должен содержать 6 символов!");
         return;
@@ -66,14 +73,35 @@ void MainWindow::on_EnterButton_clicked()
     password = Euser.pas;
     rc = check_pass(db, Euser.log, &Euser);
     cout << "rc = " << rc << " password "<< password << " Euser.pas " << Euser.pas << endl;
+    cout << "counter = " << counter << endl;
     if (rc == 1)
     {
+        counter += 1;
+        cout << "counter = " << counter << endl;
+        if (counter == 3)
+        {
+            cout << "ERROR" << endl;
+            QMessageBox::warning(this, "Ошибка ввода", "Вы превысили лимит попыток!"
+                                                       " Введите код администратора");
+            ui->AdmEdit->show();
+            ui->adminLabel->show();
+            ui->Runbut->show();
+
+            ui->LogEdit->hide();
+            ui->PasEdit->hide();
+            ui->EnterButton->hide();
+            ui->RegButton->hide();
+            ui->PasLabel->hide();
+            ui->LogLabel->hide();
+            return;
+        }
         QMessageBox::warning(this, "Ошибка ввода", "Неверные данные");
-        return;
+        //return;
     }
     else
     {
         QMessageBox::information(this, "Успех", "Вы успешно вошли");
+        counter = 0;
         ui->stackedWidget->setCurrentIndex(2);
     }
     cout << "id = " << Euser.id << endl;
@@ -84,20 +112,22 @@ void MainWindow::on_EnterButton_clicked()
 void MainWindow::on_RegInButton_clicked()
 {
     QString TRlog = ui->RLogEdit->text();
-    QString TRpas = ui->RPasEdit->text();
+    QString TRpas = generate_hash(ui->RPasEdit->text().toStdString());
     QString TRname = ui->RNameEdit->text();
     QString TRphone = ui->RPhoneEdit->text();
     QString TRadr = ui->RAdrEdit->text();
+
     if (TRlog.length() != 4)
     {
         QMessageBox::warning(this, "Ошибка ввода", "Логин должен содержать 4 цифры!");
         return;
     }
-    if (TRpas.length() != 6 || TRpas.isEmpty())
+    if (ui->RPasEdit->text().length() != 6 || TRpas.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Пароль должен содержать 6 символов!");
         return;
     }
+
     if (TRname.isEmpty() || TRphone.isEmpty() || TRadr.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Заполните все поля");
@@ -128,5 +158,43 @@ void MainWindow::on_RegInButton_clicked()
         return;
     }
     cout << "id = " << Ruser.id << endl;
+    cout << Ruser.pas << " -- password" << endl;
+}
+
+
+void MainWindow::on_Runbut_clicked()
+{
+    if (ui->AdmEdit->text() != "AAA")
+    {
+        cout << " WRONG Code " << endl;
+        return;
+    }
+    ui->AdmEdit->hide();
+    ui->adminLabel->hide();
+    ui->Runbut->hide();
+
+    ui->LogEdit->show();
+    ui->PasEdit->show();
+    ui->EnterButton->show();
+    ui->RegButton->show();
+    ui->PasLabel->show();
+    ui->LogLabel->show();
+    counter = 0;
+    return;
+}
+
+
+void MainWindow::on_AddButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+    return;
+}
+
+
+void MainWindow::on_ConfirmButton_clicked()
+{
+    QString TFname = ui->FNameEdit->text();
+    set_files(db, &TFname);
+    return;
 }
 

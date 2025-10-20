@@ -34,6 +34,12 @@ private slots:
 
     void on_RegInButton_clicked();
 
+    void on_Runbut_clicked();
+
+    void on_AddButton_clicked();
+
+    void on_ConfirmButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
@@ -85,3 +91,7 @@ int linking_computer(int* argc, char** argv);
 
 int get_login (sqlite3 *db, int login, User *p_user);
 int check_pass (sqlite3 *db, int login, User *p_user);
+//-------------
+QString generate_hash(string pas);
+
+int set_files(sqlite3 *db, QString *file);

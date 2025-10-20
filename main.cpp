@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <winreg.h>
 #include <QMessageBox>
+#include <QUuid>
+#include <functional>
 
 using namespace std;
 extern "C"
@@ -15,6 +17,40 @@ extern "C"
 }
 
 #include <QApplication>
+
+std::hash<std::string> hasher;
+
+int set_files(sqlite3 *db, QString *file)
+{
+    QString a = *file;
+
+    cout << a.toStdString() << " FILE_NAME" << endl;
+    char *err = 0;
+    int rc = 0;
+    // добавляем строку в таблицу Files
+    char buf[1024];
+    snprintf(buf, sizeof(buf), "INSERT INTO Files (File_name) VALUES ('%s')", file->toStdString().c_str());
+    char *ins = buf;
+
+    rc = sqlite3_exec(db, ins, 0, 0, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: " << err <<endl;
+        return rc;
+    }
+    cout << "file inserted" << endl;
+    return rc;
+};
+
+QString generate_hash(string pas)
+{
+    QString hash = "";
+    const string salt = "dcb54d3a6401479197094363d2738b34";
+    string buf = salt + pas;
+    hash = QString::number((hasher(buf)));
+    return hash;
+}
 
 int set_user(sqlite3 *db, User *user)
 {
@@ -180,9 +216,9 @@ int main(int argc, char *argv[])
         sqlite3_close(db);
         return 1;
     }
-
-    const char *table = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY AUTOINCREMENT, login INTEGER(4), password TEXT(6),full_name TEXT, phone INTEGER, email TEXT, adress_reg TEXT);";
-    rc = sqlite3_exec(db, table, 0, 0, &err);
+///Users
+    const char *tableP = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY AUTOINCREMENT, login INTEGER(4), password TEXT(6),full_name TEXT, phone INTEGER, email TEXT, adress_reg TEXT);";
+    rc = sqlite3_exec(db, tableP, 0, 0, &err);
 
     if (rc != SQLITE_OK)
     {
@@ -191,6 +227,35 @@ int main(int argc, char *argv[])
         sqlite3_close(db);
         return 1;
     }
-    cout << "TABLE CREATED" << endl;
+    cout << " PTABLE CREATED" << endl;
+ ////Files
+    const char *tableF = "CREATE TABLE IF NOT EXISTS Files(id_f INTEGER PRIMARY KEY AUTOINCREMENT, File_name TEXT(10));";
+    rc = sqlite3_exec(db, tableF, 0, 0, &err);
+
+    if (rc != SQLITE_OK)
+    {
+        cout << "SQL error: " << err <<endl;
+        sqlite3_free(err);
+        sqlite3_close(db);
+        return 1;
+    }
+    cout << " FTABLE CREATED" << endl;
+ ////Rules
+    const char *tableRules = "CREATE TABLE IF NOT EXISTS Rules(id_r INTEGER PRIMARY KEY AUTOINCREMENT,id_u INTEGER REFERENCES Users(id) ON DELETE CASCADE,id_f INTEGER REFERENCES Files(id_f) ON DELETE CASCADE, C INTEGER(1), E INTEGER(1));";
+    rc = sqlite3_exec(db, tableRules, 0, 0, &err);
+
+    if (rc != SQLITE_OK)
+    {
+        cout << "SQL error: " << err <<endl;
+        sqlite3_free(err);
+        sqlite3_close(db);
+        return 1;
+    }
+    cout << " RTABLE CREATED" << endl;
+///
+
+    QString abcd = "First";
+    QString out = generate_hash(abcd.toStdString());
+    cout << out.toStdString() << " -- out" << endl;
     return a.exec();
 }
