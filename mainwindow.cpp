@@ -44,13 +44,13 @@ void MainWindow::on_EnterButton_clicked()
 {
     cout << "EnterButton Clicked " << endl;
     QString Tlog = ui->LogEdit->text();
-    QString Tpas = ui->PasEdit->text();
+    QString Tpas = generate_hash(ui->PasEdit->text().toStdString());
     if (Tlog.length() != 4)
     {
         QMessageBox::warning(this, "Ошибка ввода", "Логин должен содержать 4 цифры!");
         return;
     }
-    if (Tpas.length() != 6 || Tpas.isEmpty())
+    if (ui->PasEdit->text().length() != 6 || Tpas.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Пароль должен содержать 6 символов!");
         return;
@@ -84,20 +84,22 @@ void MainWindow::on_EnterButton_clicked()
 void MainWindow::on_RegInButton_clicked()
 {
     QString TRlog = ui->RLogEdit->text();
-    QString TRpas = ui->RPasEdit->text();
+    QString TRpas = generate_hash(ui->RPasEdit->text().toStdString());
     QString TRname = ui->RNameEdit->text();
     QString TRphone = ui->RPhoneEdit->text();
     QString TRadr = ui->RAdrEdit->text();
+
     if (TRlog.length() != 4)
     {
         QMessageBox::warning(this, "Ошибка ввода", "Логин должен содержать 4 цифры!");
         return;
     }
-    if (TRpas.length() != 6 || TRpas.isEmpty())
+    if (ui->RPasEdit->text().length() != 6 || TRpas.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Пароль должен содержать 6 символов!");
         return;
     }
+
     if (TRname.isEmpty() || TRphone.isEmpty() || TRadr.isEmpty())
     {
         QMessageBox::warning(this, "Ошибка ввода", "Заполните все поля");
@@ -128,5 +130,6 @@ void MainWindow::on_RegInButton_clicked()
         return;
     }
     cout << "id = " << Ruser.id << endl;
+    cout << Ruser.pas << " -- password" << endl;
 }
 

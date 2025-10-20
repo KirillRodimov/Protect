@@ -85,3 +85,5 @@ int linking_computer(int* argc, char** argv);
 
 int get_login (sqlite3 *db, int login, User *p_user);
 int check_pass (sqlite3 *db, int login, User *p_user);
+//-------------
+QString generate_hash(string pas);

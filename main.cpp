@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <winreg.h>
 #include <QMessageBox>
+#include <QUuid>
+#include <functional>
 
 using namespace std;
 extern "C"
@@ -15,6 +17,17 @@ extern "C"
 }
 
 #include <QApplication>
+
+std::hash<std::string> hasher;
+
+QString generate_hash(string pas)
+{
+    QString hash = "";
+    const string salt = "dcb54d3a6401479197094363d2738b34";
+    string buf = salt + pas;
+    hash = QString::number((hasher(buf)));
+    return hash;
+}
 
 int set_user(sqlite3 *db, User *user)
 {
@@ -192,5 +205,8 @@ int main(int argc, char *argv[])
         return 1;
     }
     cout << "TABLE CREATED" << endl;
+    QString abcd = "First";
+    QString out = generate_hash(abcd.toStdString());
+    cout << out.toStdString() << " -- out" << endl;
     return a.exec();
 }
