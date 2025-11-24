@@ -5,6 +5,7 @@
 #include <QIntValidator>
 using namespace std;
 int counter = 0;
+User Guser;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -40,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->FNameEdit->setValidator(new QRegularExpressionValidator(re,this));
 
+    ///
+    ///
 }
 
 MainWindow::~MainWindow()
@@ -105,6 +108,30 @@ void MainWindow::on_EnterButton_clicked()
         ui->stackedWidget->setCurrentIndex(2);
     }
     cout << "id = " << Euser.id << endl;
+
+
+    std::list<u_file> Flist;
+    Flist = get_files(db);
+
+    ui->listWidget->clear();
+
+    for (const u_file &u_file : Flist)
+    {
+        QString itemText = QString("%1: %2").arg(u_file.id_f).arg(u_file.namef);
+        QListWidgetItem *item = new QListWidgetItem(itemText);
+
+        // Сохраняем ID в данных элемента (для дальнейшего использования)
+        item->setData(Qt::UserRole, u_file.id_f);
+
+        ui->listWidget->addItem(item);
+    }
+    qDebug() << "=== СПИСОК ФАЙЛОВ ===";
+    for (const u_file& u_file: Flist) {
+        qDebug() << "ID:" << u_file.id_f << "Name:" << u_file.namef;
+    }
+    qDebug() << "=====================";
+    Guser = Euser;
+
     return;
 }
 
@@ -194,7 +221,15 @@ void MainWindow::on_AddButton_clicked()
 void MainWindow::on_ConfirmButton_clicked()
 {
     QString TFname = ui->FNameEdit->text();
-    set_files(db, &TFname);
+    QString all_text = ui->Soderjanie_textEdit->toPlainText();
+    qDebug() << "Содержимое:" << all_text;
+    set_files(db, &TFname, &all_text);
     return;
+}
+
+
+void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
+{
+     cout << Guser.id << " Id Guser" << endl;
 }
 

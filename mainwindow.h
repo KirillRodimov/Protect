@@ -7,6 +7,7 @@
 #include <cstring>
 #include <windows.h>
 #include <winreg.h>
+#include <QListWidgetItem>
 extern "C"
 {
 #include "sqlite3.h"
@@ -40,10 +41,19 @@ private slots:
 
     void on_ConfirmButton_clicked();
 
+
+    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
+
+struct u_file
+{
+    int id_f;
+    string namef;
+};
 
 class User
 {
@@ -94,4 +104,7 @@ int check_pass (sqlite3 *db, int login, User *p_user);
 //-------------
 QString generate_hash(string pas);
 
-int set_files(sqlite3 *db, QString *file);
+int set_files(sqlite3 *db, QString *name_file, QString *text);
+//int create_file(sqlite3 *db, int id_u, int id_f);
+int insert_rules(sqlite3 *db);
+std::list<u_file> get_files (sqlite3 *db);

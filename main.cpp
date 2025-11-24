@@ -9,6 +9,9 @@
 #include <QMessageBox>
 #include <QUuid>
 #include <functional>
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
 
 using namespace std;
 extern "C"
@@ -19,17 +22,109 @@ extern "C"
 #include <QApplication>
 
 std::hash<std::string> hasher;
+//std::list<u_file> Lfiles;
 
-int set_files(sqlite3 *db, QString *file)
+int callback_file(void *notUsed, int colCount, char **columns, char **colNames)
 {
-    QString a = *file;
+    std::list<u_file>* Lis = static_cast<list<u_file>*> (notUsed);
+    u_file f;
+    f.id_f = atoi(columns[0]);
+    f.namef = columns[1];
+    cout << f.namef << " name " << f.id_f << " id " << endl;
+    Lis->push_back(f);
+    return 0;
+};
+/*
+int create_file(sqlite3 *db, int id_u, int id_f)
+{
+    char *err = 0;
+    int rc = 0;
+    // добавляем строку в таблицу Files
+    char buf[1024];
+    snprintf(buf, sizeof(buf), "INSERT INTO Rules (id_u, id_f, C, E) VALUES ('%d, %d, %d, %d,')", id_u, id_f, 1, 1);
+    char *ins = buf;
+
+    rc = sqlite3_exec(db, ins, 0, 0, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: " << err <<endl;
+        return rc;
+    }
+}
+*/
+
+int insert_rules(sqlite3 *db)
+{
+    char *err = 0;
+    int rc = 0;
+    // добавляем строку в таблицу Files
+    const char* arrins [9] =
+    {
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (1, 1, 1, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (1, 2, 0, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (1, 3, 0, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (2, 1, 0, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (2, 2, 1, 0)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (2, 3, 1, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (3, 1, 0, 1)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (3, 2, 1, 0)",
+        "INSERT INTO Rules (id_u, id_f, C, E) VALUES (3, 3, 0, 1)"
+
+    };
+    //char buf[1024];
+    //snprintf(buf, sizeof(buf), "INSERT INTO Rules (id_u, id_f, C, E) VALUES ('%d, %d, %d, %d,')", 1, 1, 1, 1);
+    //char *ins = buf;
+
+    for( int i = 0; i < 9; i++)
+    {
+        rc = sqlite3_exec(db, arrins[i], 0, 0, &err);
+        if (rc != SQLITE_OK )
+        {
+            cout << "SQL error: " << err <<endl;
+            return rc;
+        }
+    }
+
+    /*rc = sqlite3_exec(db, ins, 0, 0, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: " << err <<endl;
+        return rc;
+    }
+    */
+    return rc;
+}
+
+std::list<u_file> get_files (sqlite3 *db)
+{
+    std::list<u_file> Lfiles;
+    char *err = 0;
+    int rc = 0;
+    const char *sel = "SELECT id_f, File_name FROM Files";
+
+    rc = sqlite3_exec(db, sel, callback_file,(void*) &Lfiles, &err);
+    cout << "Hi " << rc <<endl;
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: get files" << err <<endl;
+        return Lfiles;
+    }
+    return Lfiles;
+};
+
+int set_files(sqlite3 *db, QString *name_file, QString *text)
+{
+    QString a = *name_file;
+
 
     cout << a.toStdString() << " FILE_NAME" << endl;
     char *err = 0;
     int rc = 0;
     // добавляем строку в таблицу Files
     char buf[1024];
-    snprintf(buf, sizeof(buf), "INSERT INTO Files (File_name) VALUES ('%s')", file->toStdString().c_str());
+    snprintf(buf, sizeof(buf), "INSERT INTO Files (File_name) VALUES ('%s')", name_file->toStdString().c_str());
     char *ins = buf;
 
     rc = sqlite3_exec(db, ins, 0, 0, &err);
@@ -40,6 +135,22 @@ int set_files(sqlite3 *db, QString *file)
         return rc;
     }
     cout << "file inserted" << endl;
+
+    QString folderPath = "Logs"; // Имя папки в проекте
+    //QString fileName = "output.txt"; // Имя файла
+
+    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
+    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + *name_file + ".txt");
+    cout << *text->toStdString().c_str() << " TEXT" << endl;
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << *text;
+        file.close();
+    }
+
     return rc;
 };
 
@@ -253,7 +364,7 @@ int main(int argc, char *argv[])
     }
     cout << " RTABLE CREATED" << endl;
 ///
-
+    //insert_rules(db);
     QString abcd = "First";
     QString out = generate_hash(abcd.toStdString());
     cout << out.toStdString() << " -- out" << endl;
