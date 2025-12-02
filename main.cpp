@@ -24,6 +24,33 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
+int callback_rule(void *notUsed, int colCount, char **columns, char **colNames)
+{
+    rule* pravila = static_cast<rule*> (notUsed);
+    pravila->C = atoi(columns[0]);
+    pravila->E = atoi(columns[1]);
+    cout << pravila->C << " C " << pravila->E << " E " << endl;
+    return 0;
+};
+
+rule check_rules(sqlite3 *db, int id_u, int id_f)
+{
+    rule ruleuser;
+    char *err = 0;
+    int rc = 0;
+    char buf[1024];
+    snprintf(buf, sizeof(buf), "SELECT C, E FROM Rules WHERE id_u = %d AND id_f = %d", id_u, id_f);
+    char *sel = buf;
+    rc = sqlite3_exec(db, sel, callback_rule,(void*) &ruleuser, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: check rules" << err <<endl;
+        return ruleuser;
+    }
+    return ruleuser;
+}
+
 int callback_file(void *notUsed, int colCount, char **columns, char **colNames)
 {
     std::list<u_file>* Lis = static_cast<list<u_file>*> (notUsed);

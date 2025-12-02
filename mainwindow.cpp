@@ -3,9 +3,16 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QIntValidator>
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
+#include <QFileInfo>
 using namespace std;
 int counter = 0;
 User Guser;
+int Eid_file;
+QString Ename_file;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -122,6 +129,7 @@ void MainWindow::on_EnterButton_clicked()
 
         // Сохраняем ID в данных элемента (для дальнейшего использования)
         item->setData(Qt::UserRole, u_file.id_f);
+        item->setData(Qt::UserRole + 1, u_file.namef.c_str());
 
         ui->listWidget->addItem(item);
     }
@@ -230,6 +238,88 @@ void MainWindow::on_ConfirmButton_clicked()
 
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-     cout << Guser.id << " Id Guser" << endl;
+    cout << Guser.id << " Id Guser" << endl;
+    ui->CopyButton->setEnabled(false);
+    ui->Edit_Button->setEnabled(false);
+
+    int fileId = item->data(Qt::UserRole).toInt();
+    QString fileName = item->data(Qt::UserRole + 1).toString();
+    Eid_file = fileId;
+    Ename_file = fileName;
+    cout << Eid_file << " Eid " << Ename_file.toStdString() << " Ename" << endl;
+    rule Rul;
+    Rul = check_rules(db, Guser.id, fileId);
+    cout << Rul.C << " C " << Rul.E << " E " << endl;
+    if (Rul.C == 1)
+    {
+        ui->CopyButton->setEnabled(true);
+    }
+    if (Rul.E == 1)
+    {
+        ui->Edit_Button->setEnabled(true);
+    }
+    return;
+}
+
+
+void MainWindow::on_Edit_Button_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(4);
+    ui->Filename_label->setText(Ename_file);
+
+
+    QString folderPath = "Logs"; // Имя папки в проекте
+
+    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
+    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
+
+    QFileInfo fileInfo(filePath);
+
+    if (!fileInfo.isReadable()) {
+        qDebug() << "Файл не доступен для чтения:" << filePath;
+        return;
+    }
+
+    cout << filePath.toStdString() << " Filepath" << endl;
+    cout << Ename_file.toStdString() << " GLOBAL" << endl;
+
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        QString content = in.readAll();
+        qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
+        ui->Edit_textEdit->setPlainText(content);
+        file.close();
+    }
+
+    return;
+}
+
+
+void MainWindow::on_Save_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+    QString folderPath = "Logs"; // Имя папки в проекте
+    //QString fileName = "output.txt"; // Имя файла
+
+    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
+    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << ui->Edit_textEdit->toPlainText();
+        file.close();
+    }
+}
+
+
+void MainWindow::on_Cancel_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
 }
 

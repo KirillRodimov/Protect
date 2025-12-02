@@ -44,10 +44,22 @@ private slots:
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
+    void on_Edit_Button_clicked();
+
+    void on_Save_pushButton_clicked();
+
+    void on_Cancel_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
+
+struct rule
+{
+    int C;
+    int E;
+};
 
 struct u_file
 {
@@ -105,6 +117,9 @@ int check_pass (sqlite3 *db, int login, User *p_user);
 QString generate_hash(string pas);
 
 int set_files(sqlite3 *db, QString *name_file, QString *text);
+int callback_file(void *notUsed, int colCount, char **columns, char **colNames);
 //int create_file(sqlite3 *db, int id_u, int id_f);
 int insert_rules(sqlite3 *db);
 std::list<u_file> get_files (sqlite3 *db);
+rule check_rules(sqlite3 *db, int id_u, int id_f);
+int callback_rule(void *notUsed, int colCount, char **columns, char **colNames);
