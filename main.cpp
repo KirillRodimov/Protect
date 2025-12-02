@@ -24,16 +24,67 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
-int generate_file_hash(string* content, string* filename ,string* path)
+
+
+int callback_hashfile(void *notUsed, int colCount, char **columns, char **colNames)
+{
+    //std::list<u_file>* Lis = static_cast<list<u_file>*> (notUsed);
+    string* hash = static_cast<string*> (notUsed);
+    *hash = columns[0];
+    cout << *hash << " CHECK DB HASH " << endl;
+    return 0;
+};
+
+string check_hash(string* truehash, string* filename, sqlite3 *db)
+{
+    string a = "AAAAAAAAA";
+
+    char *err = 0;
+    int rc = 0;
+    string nottruehash;
+    char buf[1024];
+    //snprintf(buf, sizeof(buf),"SELECT * FROM Files WHERE File_name = '%s' AND File_hash = '%s'", filename->c_str(), truehash->c_str());
+    snprintf(buf, sizeof(buf),"SELECT File_hash FROM Files WHERE File_name = '%s'", filename->c_str());
+
+    rc = sqlite3_exec(db, buf, callback_hashfile,(void*) &nottruehash, &err);
+    //cout << "Hi " << rc <<endl;
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: get files" << err <<endl;
+        return nottruehash;
+    }
+    return nottruehash;
+}
+
+string generate_file_hash(string* content, string* filename ,string* path)
 {
     string fullname = *content + *filename + *path;
     cout << fullname << " FULL NAME" << endl;
     QString file_hash = "";
     file_hash = QString::number((hasher(fullname)));
     cout << file_hash.toStdString() << " FILEHASH" << endl;
-    return 0;
+    return file_hash.toStdString();
 }
 
+int savehash_to_db(string* filename, sqlite3 *db, string* hash)
+{
+    char *err = 0;
+    int rc = 0;
+    char buf[1024];
+    cout << " SAVEDB " << *hash << " HASH " << *filename << " FN" <<endl;
+    snprintf(buf, sizeof(buf), "UPDATE Files SET File_hash = '%s' WHERE File_name = '%s'", hash->c_str(), filename->c_str());
+    cout << " SAVEDB1 " << endl;
+    char *ins = buf;
+
+    rc = sqlite3_exec(db, ins, 0, 0, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: UPDATE FILE HASH" << err <<endl;
+        return rc;
+    }
+    return 0;
+}
 int callback_rule(void *notUsed, int colCount, char **columns, char **colNames)
 {
     rule* pravila = static_cast<rule*> (notUsed);
@@ -365,7 +416,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 ///Users
-    const char *tableP = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY AUTOINCREMENT, login INTEGER(4), password TEXT(6),full_name TEXT, phone INTEGER, email TEXT, adress_reg TEXT);";
+    const char *tableP = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY AUTOINCREMENT, login INTEGER(4), password TEXT(30),full_name TEXT, phone INTEGER, email TEXT, adress_reg TEXT);";
     rc = sqlite3_exec(db, tableP, 0, 0, &err);
 
     if (rc != SQLITE_OK)
@@ -377,7 +428,7 @@ int main(int argc, char *argv[])
     }
     cout << " PTABLE CREATED" << endl;
  ////Files
-    const char *tableF = "CREATE TABLE IF NOT EXISTS Files(id_f INTEGER PRIMARY KEY AUTOINCREMENT, File_name TEXT(10));";
+    const char *tableF = "CREATE TABLE IF NOT EXISTS Files(id_f INTEGER PRIMARY KEY AUTOINCREMENT, File_name TEXT(10), File_hash TEXT(30));";
     rc = sqlite3_exec(db, tableF, 0, 0, &err);
 
     if (rc != SQLITE_OK)

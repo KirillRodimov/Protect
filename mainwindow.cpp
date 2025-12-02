@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
+#include <cstring>
 using namespace std;
 int counter = 0;
 User Guser;
@@ -278,14 +279,17 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     }
     string fn = fileName.toStdString();
     string fp = filePath.toStdString();
-    generate_file_hash(&cont, &fn, &fp);
+    string hash = generate_file_hash(&cont, &fn, &fp);
+    savehash_to_db(&fn, db, &hash);
     return;
 }
 
 
 void MainWindow::on_Edit_Button_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(4);
+    ui->Filename_label->setText(Ename_file);
+
+    //ui->stackedWidget->setCurrentIndex(4);
     ui->Filename_label->setText(Ename_file);
 
 
@@ -305,24 +309,42 @@ void MainWindow::on_Edit_Button_clicked()
 
     cout << filePath.toStdString() << " Filepath" << endl;
     cout << Ename_file.toStdString() << " GLOBAL" << endl;
-
+    string cont;
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream in(&file);
         QString content = in.readAll();
+        cont = content.toStdString();
         qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
         ui->Edit_textEdit->setPlainText(content);
         file.close();
     }
+    string fn = Ename_file.toStdString();
+    string fp = filePath.toStdString();
 
+    string hash_true = generate_file_hash(&cont, &fn, &fp);
+
+
+    string check = check_hash(&hash_true, &fn, db);
+
+    cout << hash_true << " HASH TRUE EDIT" << endl;
+    cout << check << " HASH CHECK EDIT" << endl;
+
+    cout << check << " CHECK -----" << endl;
+    if (hash_true != check)
+    {
+        QMessageBox::warning(this, "Ошибка", "Файл был изменен извне");
+        return;
+    }
+    ui->stackedWidget->setCurrentIndex(4);
     return;
 }
 
 
 void MainWindow::on_Save_pushButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(2);
+    //ui->stackedWidget->setCurrentIndex(2);
     QString folderPath = "Logs"; // Имя папки в проекте
     //QString fileName = "output.txt"; // Имя файла
 
@@ -331,11 +353,25 @@ void MainWindow::on_Save_pushButton_clicked()
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
     QFile file(filePath);
+    string fp = filePath.toStdString();
+    string fn = Ename_file.toStdString();
+    string cont;
+
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
         out << ui->Edit_textEdit->toPlainText();
+        //QString content;
+        //ui->Edit_textEdit->setPlainText(content);
+        //cont = content.toStdString();
         file.close();
     }
+    QString content = ui->Edit_textEdit->toPlainText();
+    cont = content.toStdString();
+    cout << cont << " CONT AFTER SAVE" << endl;
+    string hash = generate_file_hash(&cont, &fn, &fp);
+    savehash_to_db(&fn, db, &hash);
+    ui->stackedWidget->setCurrentIndex(2);
+
 }
 
 
