@@ -129,3 +129,5 @@ int insert_rules(sqlite3 *db);
 std::list<u_file> get_files (sqlite3 *db);
 rule check_rules(sqlite3 *db, int id_u, int id_f);
 int callback_rule(void *notUsed, int colCount, char **columns, char **colNames);
+
+int generate_file_hash(string* content, string* filename ,string* path);

@@ -24,6 +24,16 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
+int generate_file_hash(string* content, string* filename ,string* path)
+{
+    string fullname = *content + *filename + *path;
+    cout << fullname << " FULL NAME" << endl;
+    QString file_hash = "";
+    file_hash = QString::number((hasher(fullname)));
+    cout << file_hash.toStdString() << " FILEHASH" << endl;
+    return 0;
+}
+
 int callback_rule(void *notUsed, int colCount, char **columns, char **colNames)
 {
     rule* pravila = static_cast<rule*> (notUsed);

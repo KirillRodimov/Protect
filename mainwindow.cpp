@@ -259,6 +259,26 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     {
         ui->Edit_Button->setEnabled(true);
     }
+
+    QString folderPath = "Logs";
+
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + fileName + ".txt");
+    string cont;
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        QString content = in.readAll();
+        cont = content.toStdString();
+        qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
+        file.close();
+    }
+    string fn = fileName.toStdString();
+    string fp = filePath.toStdString();
+    generate_file_hash(&cont, &fn, &fp);
     return;
 }
 
@@ -337,8 +357,6 @@ void MainWindow::on_pushButton_clicked()
     projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
-
-    //QFileInfo fileInfo(filePath);
 
 
     QFile file(filePath);
