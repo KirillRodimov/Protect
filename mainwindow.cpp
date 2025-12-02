@@ -323,3 +323,37 @@ void MainWindow::on_Cancel_pushButton_clicked()
     ui->stackedWidget->setCurrentIndex(2);
 }
 
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(5);
+    ui->Readlabel->setText(Ename_file);
+
+
+    QString folderPath = "Logs";
+
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
+
+    //QFileInfo fileInfo(filePath);
+
+
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        QString content = in.readAll();
+        qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
+        ui->Read_textEdit->setPlainText(content);
+        file.close();
+    }
+}
+
+
+void MainWindow::on_ButtonBack_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+

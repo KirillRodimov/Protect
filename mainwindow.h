@@ -50,6 +50,10 @@ private slots:
 
     void on_Cancel_pushButton_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_ButtonBack_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

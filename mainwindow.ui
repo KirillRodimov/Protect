@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QWidget" name="layoutWidget">
@@ -201,32 +201,6 @@
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>250</y>
-        <width>168</width>
-        <height>26</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QPushButton" name="AddButton">
-         <property name="text">
-          <string>Add file</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="GiveButton">
-         <property name="text">
-          <string>Give Rules</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
         <x>60</x>
         <y>10</y>
         <width>258</width>
@@ -256,6 +230,32 @@
         </layout>
        </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>250</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Read</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="AddButton">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>290</y>
+        <width>166</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add file</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="page_4">
@@ -332,7 +332,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>70</x>
@@ -364,6 +364,44 @@
         </layout>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_6">
+     <widget class="QTextEdit" name="Read_textEdit">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>60</y>
+        <width>281</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Readlabel">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>40</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ButtonBack">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>320</y>
+        <width>80</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Go back</string>
+      </property>
      </widget>
     </widget>
    </widget>
