@@ -358,3 +358,9 @@ void MainWindow::on_ButtonBack_clicked()
     ui->stackedWidget->setCurrentIndex(2);
 }
 
+
+void MainWindow::on_CopyButton_clicked()
+{
+    QMessageBox::information(this, "Успех", "Вы успешно скопировали файл");
+}
+

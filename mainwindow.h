@@ -54,6 +54,8 @@ private slots:
 
     void on_ButtonBack_clicked();
 
+    void on_CopyButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
