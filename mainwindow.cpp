@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->AdmEdit->hide();
     ui->adminLabel->hide();
     ui->Runbut->hide();
+    ui->AddButton->hide();
 
     ui->stackedWidget->setCurrentIndex(0);
     connect(ui->RegButton, &QPushButton::clicked, this, [=](){
