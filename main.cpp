@@ -25,6 +25,34 @@ std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
 
+bool createTimestampedCopyFile(const QString& originalFileName)
+{
+    QString originalPath = "Logs/" + originalFileName + ".txt";
+    QFile originalFile(originalPath);
+
+    if (!originalFile.exists()) {
+        return false;
+    }
+
+    QFileInfo fileInfo(originalFileName);
+    QString baseName = fileInfo.completeBaseName();
+    QString suffix = fileInfo.suffix();
+
+    // Генерируем имя с меткой времени
+    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+    QString newFileName;
+
+    if (suffix.isEmpty()) {
+        newFileName = baseName + "_copy_" + timestamp;
+    } else {
+        newFileName = baseName + "_copy_" + timestamp + "." + suffix;
+    }
+
+    QString newPath = "Logs/" + newFileName;
+
+    return originalFile.copy(newPath);
+}
+
 
 int callback_hashfile(void *notUsed, int colCount, char **columns, char **colNames)
 {

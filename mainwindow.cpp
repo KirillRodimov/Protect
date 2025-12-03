@@ -59,6 +59,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//ENTER BUTTON
+
 void MainWindow::on_EnterButton_clicked()
 {
     cout << "EnterButton Clicked " << endl;
@@ -146,6 +148,8 @@ void MainWindow::on_EnterButton_clicked()
 }
 
 
+//REG BUTTON
+
 void MainWindow::on_RegInButton_clicked()
 {
     QString TRlog = ui->RLogEdit->text();
@@ -199,6 +203,8 @@ void MainWindow::on_RegInButton_clicked()
 }
 
 
+//RUN BUTTON
+
 void MainWindow::on_Runbut_clicked()
 {
     if (ui->AdmEdit->text() != "AAA")
@@ -221,12 +227,16 @@ void MainWindow::on_Runbut_clicked()
 }
 
 
+//ADD BUTTON
+
 void MainWindow::on_AddButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(3);
     return;
 }
 
+
+//CONFIRM BUTTON
 
 void MainWindow::on_ConfirmButton_clicked()
 {
@@ -237,6 +247,8 @@ void MainWindow::on_ConfirmButton_clicked()
     return;
 }
 
+
+//КЛИК НА ФАЙЛ
 
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
@@ -277,13 +289,15 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
         qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
         file.close();
     }
-    string fn = fileName.toStdString();
-    string fp = filePath.toStdString();
-    string hash = generate_file_hash(&cont, &fn, &fp);
-    savehash_to_db(&fn, db, &hash);
+    //string fn = fileName.toStdString();
+    //string fp = filePath.toStdString();
+    //string hash = generate_file_hash(&cont, &fn, &fp);
+    //savehash_to_db(&fn, db, &hash);
     return;
 }
 
+
+//EDIT BUTTON
 
 void MainWindow::on_Edit_Button_clicked()
 {
@@ -334,10 +348,26 @@ void MainWindow::on_Edit_Button_clicked()
     cout << check << " CHECK -----" << endl;
     if (hash_true != check)
     {
-        QMessageBox::warning(this, "Ошибка", "Файл был изменен извне");
-        return;
+        if (check.empty() == 1)
+        {
+            savehash_to_db(&fn, db, &hash_true);
+            cout << " _" << hash_true << "_ Hash saved in db" << endl;
+        }
+        else
+        {
+            QMessageBox::warning(this, "Ошибка", "Файл был изменен извне");
+            return;
+        }
     }
     ui->stackedWidget->setCurrentIndex(4);
+    //Создание копии
+    bool copy = createTimestampedCopyFile(Ename_file);
+    if (copy == 1)
+    {
+        cout << "Копия файла " << Ename_file.toStdString() << " создана" << endl;
+    }
+
+
     return;
 }
 

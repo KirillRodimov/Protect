@@ -287,10 +287,10 @@ public:
 
         pushButton = new QPushButton(page_3);
         pushButton->setObjectName("pushButton");
-        pushButton->setGeometry(QRect(120, 250, 131, 24));
+        pushButton->setGeometry(QRect(130, 250, 121, 24));
         AddButton = new QPushButton(page_3);
         AddButton->setObjectName("AddButton");
-        AddButton->setGeometry(QRect(100, 290, 166, 24));
+        AddButton->setGeometry(QRect(90, 290, 61, 31));
         stackedWidget->addWidget(page_3);
         page_4 = new QWidget();
         page_4->setObjectName("page_4");
@@ -375,7 +375,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(4);
+        stackedWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

@@ -133,3 +133,4 @@ int callback_rule(void *notUsed, int colCount, char **columns, char **colNames);
 string generate_file_hash(string* content, string* filename ,string* path);
 int savehash_to_db(string* filename, sqlite3 *db, string* hash);
 string check_hash(string* truehash, string* filename, sqlite3 *db);
+bool createTimestampedCopyFile(const QString& originalFileName);
