@@ -13,6 +13,7 @@ int counter = 0;
 User Guser;
 int Eid_file;
 QString Ename_file;
+const quint64 crypto_key = 0x1A2B3C4D5E6F7890;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -361,10 +362,12 @@ void MainWindow::on_Edit_Button_clicked()
     }
     ui->stackedWidget->setCurrentIndex(4);
     //Создание копии
-    bool copy = createTimestampedCopyFile(Ename_file);
+    string fname_for_copy = Ename_file.toStdString() + ".txt";
+    QString fileNameQtforcopy = QString::fromStdString(fname_for_copy);
+    bool copy = createTimestampedCopyFile(fileNameQtforcopy);
     if (copy == 1)
     {
-        cout << "Копия файла " << Ename_file.toStdString() << " создана" << endl;
+        cout << "COPY OF FILE: " << Ename_file.toStdString() << " CREATED" << endl;
     }
 
 
@@ -386,6 +389,8 @@ void MainWindow::on_Save_pushButton_clicked()
     string fp = filePath.toStdString();
     string fn = Ename_file.toStdString();
     string cont;
+
+    //encrypt_file()
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);

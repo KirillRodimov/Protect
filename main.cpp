@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QByteArray>
 
 using namespace std;
 extern "C"
@@ -24,10 +25,16 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
+/*QByteArray encrypt_file(const QString& text,  quint64 key)
+{
+    QByteArray textdata = text.toUtf8();
+    SimpleCrypt
+}
+*/
 
 bool createTimestampedCopyFile(const QString& originalFileName)
 {
-    QString originalPath = "Logs/" + originalFileName + ".txt";
+    QString originalPath = "Logs/" + originalFileName;
     QFile originalFile(originalPath);
 
     if (!originalFile.exists()) {
@@ -38,6 +45,8 @@ bool createTimestampedCopyFile(const QString& originalFileName)
     QString baseName = fileInfo.completeBaseName();
     QString suffix = fileInfo.suffix();
 
+    cout << suffix.toStdString() << " SUFFIX" << endl;
+
     // Генерируем имя с меткой времени
     QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
     QString newFileName;
@@ -45,7 +54,7 @@ bool createTimestampedCopyFile(const QString& originalFileName)
     if (suffix.isEmpty()) {
         newFileName = baseName + "_copy_" + timestamp;
     } else {
-        newFileName = baseName + "_copy_" + timestamp + "." + suffix;
+        newFileName = baseName + "_copy_" + timestamp + "." + ".secretextension";
     }
 
     QString newPath = "Logs/" + newFileName;
