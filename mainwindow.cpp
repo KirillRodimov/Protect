@@ -390,7 +390,7 @@ void MainWindow::on_Save_pushButton_clicked()
     string fn = Ename_file.toStdString();
     string cont;
 
-    //encrypt_file()
+    encrypt_file()
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);

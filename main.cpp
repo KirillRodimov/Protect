@@ -25,12 +25,12 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
-/*QByteArray encrypt_file(const QString& text,  quint64 key)
+QByteArray encrypt_file(const QString& text,  quint64 key)
 {
     QByteArray textdata = text.toUtf8();
     SimpleCrypt
 }
-*/
+
 
 bool createTimestampedCopyFile(const QString& originalFileName)
 {
