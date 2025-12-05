@@ -25,6 +25,52 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
+int callback_key(void *notUsed, int colCount, char **columns, char **colNames)
+{
+    //std::list<u_file>* Lis = static_cast<list<u_file>*> (notUsed);
+    string* check_key = static_cast<string*> (notUsed);
+    *check_key = columns[0];
+    cout << *check_key << " KEY FROM DB" << endl;
+    return 0;
+}
+
+string take_modif(string* filename, sqlite3 *db)
+{
+    char *err = 0;
+    int rc = 0;
+    string dbkey;
+    char buf[1024];
+    snprintf(buf, sizeof(buf),"SELECT Last_modif FROM Files WHERE File_name = '%s'", filename->c_str());
+
+    rc = sqlite3_exec(db, buf, callback_key,(void*) &dbkey, &err);
+    //cout << "Hi " << rc <<endl;
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: takemodif" << err <<endl;
+        return dbkey;
+    }
+    return dbkey;
+}
+
+int insert_key(string* key, sqlite3 *db, string* filename)
+{
+    char *err = 0;
+    int rc = 0;
+    char buf[1024];
+    cout << " SAVEDB " << *key << " HASH " << *key << " FN" <<endl;
+    snprintf(buf, sizeof(buf), "UPDATE Files SET Last_modif = '%s' WHERE File_name = '%s'", key->c_str(), filename->c_str());
+    //cout << " SAVEDB1 " << endl;
+    char *ins = buf;
+
+    rc = sqlite3_exec(db, ins, 0, 0, &err);
+
+    if (rc != SQLITE_OK )
+    {
+        cout << "SQL error: UPDATE FILE MODIF" << err <<endl;
+        return rc;
+    }
+    return 0;
+}
 
 bool createTimestampedCopyFile(const QString& originalFileName)
 {

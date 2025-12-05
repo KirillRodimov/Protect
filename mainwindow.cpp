@@ -328,25 +328,41 @@ void MainWindow::on_Edit_Button_clicked()
     string cont;
     QFile file(filePath);
     //////////ПОТОМ ПОМЕНЯТЬ
-    SimpleCrypt crypto("123321KEY");
+    //SimpleCrypt crypto("123321KEY");
+    string fn = Ename_file.toStdString();
+    string dbkey = take_modif(&fn, db);
+
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QTextStream in(&file);
-        QString content = in.readAll();
-        cout << content.toStdString() << " CONTENT" << endl;
-        QByteArray savedEncryptedData = content.toUtf8();
-        cout << savedEncryptedData.toStdString() << " SED" << endl;
-        QString original_text_from_file = crypto.decryptFromByteArray(savedEncryptedData);
-        cout << original_text_from_file.toStdString() << " ORIGIN" << endl;
-        //?
-        //cont = content.toStdString();
-        cont = original_text_from_file.toStdString();
-        qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
-        ui->Edit_textEdit->setPlainText(original_text_from_file);
+        if (dbkey.empty() == 1)
+        {
+            QTextStream in(&file);
+            QString content = in.readAll();
+            cont = content.toStdString();
+            qDebug() << "Прочитано содержимое длиной: " << content.length() << " символов";
+            ui->Edit_textEdit->setPlainText(content);
+        }
+        else
+        {
+            SimpleCrypt crypto(dbkey.c_str());
+            QTextStream in(&file);
+            QString content = in.readAll();
+            cout << content.toStdString() << " CONTENT" << endl;
+            QByteArray savedEncryptedData = content.toUtf8();
+            cout << savedEncryptedData.toStdString() << " SED" << endl;
+            QString original_text_from_file = crypto.decryptFromByteArray(savedEncryptedData);
+            cout << original_text_from_file.toStdString() << " ORIGIN" << endl;
+            //?
+            //cont = content.toStdString();
+            cont = original_text_from_file.toStdString();
+            qDebug() << "Прочитано содержимое длиной :" << content.length() << " символов";
+            ui->Edit_textEdit->setPlainText(original_text_from_file);
+            //file.close();
+        }
         file.close();
     }
-    string fn = Ename_file.toStdString();
+    //string fn = Ename_file.toStdString();
     string fp = filePath.toStdString();
 
     string hash_true = generate_file_hash(&cont, &fn, &fp);
@@ -400,9 +416,11 @@ void MainWindow::on_Save_pushButton_clicked()
     string fp = filePath.toStdString();
     string fn = Ename_file.toStdString();
     string cont;
-    //SimpleCrypt crypto(Guser.pas.c_str());
-
-    SimpleCrypt crypto("123321KEY");
+    string skey = Guser.pas;
+    cout << skey << "  SKEY" << endl;
+    SimpleCrypt crypto(skey.c_str());
+    insert_key(&skey, db, &fn);
+    //SimpleCrypt crypto("123321KEY");
 
     QByteArray encryptedPassword = crypto.encryptToByteArray(ui->Edit_textEdit->toPlainText());
 
