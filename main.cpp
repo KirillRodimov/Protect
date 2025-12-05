@@ -25,12 +25,6 @@ extern "C"
 std::hash<std::string> hasher;
 //std::list<u_file> Lfiles;
 
-QByteArray encrypt_file(const QString& text,  quint64 key)
-{
-    QByteArray textdata = text.toUtf8();
-    SimpleCrypt
-}
-
 
 bool createTimestampedCopyFile(const QString& originalFileName)
 {
@@ -465,7 +459,7 @@ int main(int argc, char *argv[])
     }
     cout << " PTABLE CREATED" << endl;
  ////Files
-    const char *tableF = "CREATE TABLE IF NOT EXISTS Files(id_f INTEGER PRIMARY KEY AUTOINCREMENT, File_name TEXT(10), File_hash TEXT(30));";
+    const char *tableF = "CREATE TABLE IF NOT EXISTS Files(id_f INTEGER PRIMARY KEY AUTOINCREMENT, File_name TEXT(10), File_hash TEXT(30), Last_modif TEXT(30));";
     rc = sqlite3_exec(db, tableF, 0, 0, &err);
 
     if (rc != SQLITE_OK)

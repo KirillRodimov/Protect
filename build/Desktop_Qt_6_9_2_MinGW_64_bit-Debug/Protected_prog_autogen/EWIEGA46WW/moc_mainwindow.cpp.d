@@ -1,7 +1,10 @@
 C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Anvil/Proj_qt/Protected_prog/mainwindow.h \
   C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/moc_predefs.h \
+  C:/Anvil/Proj_qt/Protected_prog/simplecrypt.h \
   C:/Anvil/Proj_qt/Protected_prog/sqlite3.h \
+  C:/Qt/6.9.2/mingw_64/include/QtCore/QByteArray \
   C:/Qt/6.9.2/mingw_64/include/QtCore/QSettings \
+  C:/Qt/6.9.2/mingw_64/include/QtCore/QString \
   C:/Qt/6.9.2/mingw_64/include/QtCore/q17memory.h \
   C:/Qt/6.9.2/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.9.2/mingw_64/include/QtCore/q20iterator.h \

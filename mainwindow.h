@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <winreg.h>
 #include <QListWidgetItem>
+#include "simplecrypt.h"
 extern "C"
 {
 #include "sqlite3.h"

@@ -81,6 +81,14 @@ build CMakeFiles/Protected_prog.dir/sqlite3.c.obj: C_COMPILER__Protected_prog_un
   OBJECT_DIR = CMakeFiles\Protected_prog.dir
   OBJECT_FILE_DIR = CMakeFiles\Protected_prog.dir
 
+build CMakeFiles/Protected_prog.dir/simplecrypt.cpp.obj: CXX_COMPILER__Protected_prog_unscanned_Debug C$:/Anvil/Proj_qt/Protected_prog/simplecrypt.cpp || cmake_object_order_depends_target_Protected_prog
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\Protected_prog.dir\simplecrypt.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/include -isystem C:/Qt/6.9.2/mingw_64/include/QtCore -isystem C:/Qt/6.9.2/mingw_64/include -isystem C:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem C:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\Protected_prog.dir
+  OBJECT_FILE_DIR = CMakeFiles\Protected_prog.dir
+
 build CMakeFiles/Protected_prog.dir/Protected_prog_autogen/EWIEGA46WW/qrc_img.cpp.obj: CXX_COMPILER__Protected_prog_unscanned_Debug C$:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/EWIEGA46WW/qrc_img.cpp || cmake_object_order_depends_target_Protected_prog
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\Protected_prog.dir\Protected_prog_autogen\EWIEGA46WW\qrc_img.cpp.obj.d
@@ -97,7 +105,7 @@ build CMakeFiles/Protected_prog.dir/Protected_prog_autogen/EWIEGA46WW/qrc_img.cp
 #############################################
 # Link the executable Protected_prog.exe
 
-build Protected_prog.exe: CXX_EXECUTABLE_LINKER__Protected_prog_Debug CMakeFiles/Protected_prog.dir/Protected_prog_autogen/mocs_compilation.cpp.obj CMakeFiles/Protected_prog.dir/main.cpp.obj CMakeFiles/Protected_prog.dir/mainwindow.cpp.obj CMakeFiles/Protected_prog.dir/sqlite3.c.obj CMakeFiles/Protected_prog.dir/Protected_prog_autogen/EWIEGA46WW/qrc_img.cpp.obj | C$:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.2/mingw_64/lib/libQt6Core.a C$:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a || Protected_prog_autogen Protected_prog_autogen_timestamp_deps
+build Protected_prog.exe: CXX_EXECUTABLE_LINKER__Protected_prog_Debug CMakeFiles/Protected_prog.dir/Protected_prog_autogen/mocs_compilation.cpp.obj CMakeFiles/Protected_prog.dir/main.cpp.obj CMakeFiles/Protected_prog.dir/mainwindow.cpp.obj CMakeFiles/Protected_prog.dir/sqlite3.c.obj CMakeFiles/Protected_prog.dir/simplecrypt.cpp.obj CMakeFiles/Protected_prog.dir/Protected_prog_autogen/EWIEGA46WW/qrc_img.cpp.obj | C$:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.2/mingw_64/lib/libQt6Core.a C$:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a || Protected_prog_autogen Protected_prog_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = C:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a  C:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a  C:/Qt/6.9.2/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lmingw32  C:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a  -lshell32  -ld3d11  -ldxgi  -ldxguid  -ld3d12  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

@@ -8,12 +8,13 @@
 #include <QTextStream>
 #include <QFileInfo>
 #include <cstring>
+#include "simplecrypt.h"
 using namespace std;
 int counter = 0;
 User Guser;
 int Eid_file;
 QString Ename_file;
-const quint64 crypto_key = 0x1A2B3C4D5E6F7890;
+string save_crypto_key;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -326,13 +327,23 @@ void MainWindow::on_Edit_Button_clicked()
     cout << Ename_file.toStdString() << " GLOBAL" << endl;
     string cont;
     QFile file(filePath);
+    //////////ПОТОМ ПОМЕНЯТЬ
+    SimpleCrypt crypto("123321KEY");
+
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream in(&file);
         QString content = in.readAll();
-        cont = content.toStdString();
+        cout << content.toStdString() << " CONTENT" << endl;
+        QByteArray savedEncryptedData = content.toUtf8();
+        cout << savedEncryptedData.toStdString() << " SED" << endl;
+        QString original_text_from_file = crypto.decryptFromByteArray(savedEncryptedData);
+        cout << original_text_from_file.toStdString() << " ORIGIN" << endl;
+        //?
+        //cont = content.toStdString();
+        cont = original_text_from_file.toStdString();
         qDebug() << "Прочитано содержимое длиной:" << content.length() << "символов";
-        ui->Edit_textEdit->setPlainText(content);
+        ui->Edit_textEdit->setPlainText(original_text_from_file);
         file.close();
     }
     string fn = Ename_file.toStdString();
@@ -389,12 +400,16 @@ void MainWindow::on_Save_pushButton_clicked()
     string fp = filePath.toStdString();
     string fn = Ename_file.toStdString();
     string cont;
+    //SimpleCrypt crypto(Guser.pas.c_str());
 
-    encrypt_file()
+    SimpleCrypt crypto("123321KEY");
+
+    QByteArray encryptedPassword = crypto.encryptToByteArray(ui->Edit_textEdit->toPlainText());
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
-        out << ui->Edit_textEdit->toPlainText();
+        //out << ui->Edit_textEdit->toPlainText();
+        out << encryptedPassword;
         //QString content;
         //ui->Edit_textEdit->setPlainText(content);
         //cont = content.toStdString();

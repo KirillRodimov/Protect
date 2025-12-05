@@ -27,6 +27,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sqlite3.c
         img.qrc
         ../../../Users/Dante/Downloads/wp.jpg
+        simplecrypt.h
+        simplecrypt.cpp
+
+
 
 
 

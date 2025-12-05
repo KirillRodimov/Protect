@@ -4,8 +4,11 @@ C:/Anvil/Proj_qt/Protected_prog/mainwindow.h
  mmc:Q_OBJECT
  mdp:C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/moc_predefs.h
  mdp:C:/Anvil/Proj_qt/Protected_prog/mainwindow.h
+ mdp:C:/Anvil/Proj_qt/Protected_prog/simplecrypt.h
  mdp:C:/Anvil/Proj_qt/Protected_prog/sqlite3.h
+ mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/QByteArray
  mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/QSettings
+ mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/QString
  mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/q17memory.h
  mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/q20functional.h
  mdp:C:/Qt/6.9.2/mingw_64/include/QtCore/q20iterator.h
@@ -655,3 +658,5 @@ C:/Anvil/Proj_qt/Protected_prog/mainwindow.cpp
  uic:./ui_mainwindow.h
 C:/Anvil/Proj_qt/Protected_prog/main.cpp
  uic:ui_mainwindow.h
+C:/Anvil/Proj_qt/Protected_prog/simplecrypt.h
+C:/Anvil/Proj_qt/Protected_prog/simplecrypt.cpp

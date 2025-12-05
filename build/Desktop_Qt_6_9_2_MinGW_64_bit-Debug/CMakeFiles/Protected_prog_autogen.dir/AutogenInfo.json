@@ -364,6 +364,12 @@
 			null
 		],
 		[
+			"C:/Anvil/Proj_qt/Protected_prog/simplecrypt.h",
+			"MU",
+			"EWIEGA46WW/moc_simplecrypt.cpp",
+			null
+		],
+		[
 			"C:/Anvil/Proj_qt/Protected_prog/sqlite3.h",
 			"MU",
 			"EWIEGA46WW/moc_sqlite3.cpp",
@@ -443,6 +449,7 @@
 	[
 		[ "C:/Anvil/Proj_qt/Protected_prog/main.cpp", "MU", null ],
 		[ "C:/Anvil/Proj_qt/Protected_prog/mainwindow.cpp", "MU", null ],
+		[ "C:/Anvil/Proj_qt/Protected_prog/simplecrypt.cpp", "MU", null ],
 		[ "C:/Anvil/Proj_qt/Protected_prog/sqlite3.c", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
