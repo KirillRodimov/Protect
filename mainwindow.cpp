@@ -1,3 +1,5 @@
+#include <windows.h>
+#include <io.h>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <iostream>
@@ -15,6 +17,9 @@ User Guser;
 int Eid_file;
 QString Ename_file;
 string save_crypto_key;
+QString OpenfilePath;
+QFile* pOpenfile = nullptr;
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -315,6 +320,7 @@ void MainWindow::on_Edit_Button_clicked()
     projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
+    OpenfilePath = filePath;
 
     QFileInfo fileInfo(filePath);
 
@@ -326,18 +332,22 @@ void MainWindow::on_Edit_Button_clicked()
     cout << filePath.toStdString() << " Filepath" << endl;
     cout << Ename_file.toStdString() << " GLOBAL" << endl;
     string cont;
-    QFile file(filePath);
+
+    pOpenfile = new QFile (filePath);
+
+
     //////////ПОТОМ ПОМЕНЯТЬ
     //SimpleCrypt crypto("123321KEY");
     string fn = Ename_file.toStdString();
     string dbkey = take_modif(&fn, db);
 
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (pOpenfile->open(QIODevice::ReadWrite | QIODevice::Text))
     {
+        LockFile((HANDLE) _get_osfhandle(pOpenfile->handle()), 0, 0, -1, -1);
         if (dbkey.empty() == 1)
         {
-            QTextStream in(&file);
+            QTextStream in(pOpenfile);
             QString content = in.readAll();
             cont = content.toStdString();
             qDebug() << "Прочитано содержимое длиной: " << content.length() << " символов";
@@ -346,7 +356,7 @@ void MainWindow::on_Edit_Button_clicked()
         else
         {
             SimpleCrypt crypto(dbkey.c_str());
-            QTextStream in(&file);
+            QTextStream in(pOpenfile);
             QString content = in.readAll();
             cout << content.toStdString() << " CONTENT" << endl;
             QByteArray savedEncryptedData = content.toUtf8();
@@ -360,7 +370,7 @@ void MainWindow::on_Edit_Button_clicked()
             ui->Edit_textEdit->setPlainText(original_text_from_file);
             //file.close();
         }
-        file.close();
+        //file.close();
     }
     //string fn = Ename_file.toStdString();
     string fp = filePath.toStdString();
@@ -417,12 +427,22 @@ void MainWindow::on_Save_pushButton_clicked()
     string fn = Ename_file.toStdString();
     string cont;
     string skey = Guser.pas;
+
+
+
     cout << skey << "  SKEY" << endl;
     SimpleCrypt crypto(skey.c_str());
     insert_key(&skey, db, &fn);
     //SimpleCrypt crypto("123321KEY");
 
     QByteArray encryptedPassword = crypto.encryptToByteArray(ui->Edit_textEdit->toPlainText());
+    if (pOpenfile != nullptr)
+    {
+        UnlockFile((HANDLE) _get_osfhandle(pOpenfile->handle()), 0, 0, -1, -1);
+        pOpenfile->close();
+        delete pOpenfile;
+        pOpenfile = nullptr;
+    }
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
@@ -445,6 +465,15 @@ void MainWindow::on_Save_pushButton_clicked()
 
 void MainWindow::on_Cancel_pushButton_clicked()
 {
+    if (pOpenfile != nullptr)
+    {
+        UnlockFile((HANDLE) _get_osfhandle(pOpenfile->handle()), 0, 0, -1, -1);
+        pOpenfile->close();
+        delete pOpenfile;
+        pOpenfile = nullptr;
+    }
+
+
     ui->stackedWidget->setCurrentIndex(2);
 }
 
