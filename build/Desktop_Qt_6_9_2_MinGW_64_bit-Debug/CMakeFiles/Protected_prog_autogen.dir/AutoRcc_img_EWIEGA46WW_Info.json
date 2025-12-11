@@ -1,0 +1,26 @@
+{
+	"BUILD_DIR" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Anvil/Proj_qt/Protected_prog",
+	"CMAKE_SOURCE_DIR" : "C:/Anvil/Proj_qt/Protected_prog",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Ninja",
+	"INCLUDE_DIR" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/Protected_prog_autogen/include",
+	"INPUTS" : 
+	[
+		"C:/Anvil/Proj_qt/Protected_prog/wp.jpg",
+		"C:/Anvil/Proj_qt/Protected_prog/good.png"
+	],
+	"LOCK_FILE" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/Protected_prog_autogen.dir/AutoRcc_img_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "img" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_img.cpp",
+	"RCC_EXECUTABLE" : "C:/Qt/6.9.2/mingw_64/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "C:/Anvil/Proj_qt/Protected_prog/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/Protected_prog_autogen.dir/AutoRcc_img_EWIEGA46WW_Used.txt",
+	"SOURCE" : "C:/Anvil/Proj_qt/Protected_prog/img.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}
