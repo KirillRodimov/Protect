@@ -75,6 +75,7 @@ public:
     QPushButton *Edit_Button;
     QPushButton *pushButton;
     QPushButton *AddButton;
+    QPushButton *BackUp_Button;
     QWidget *page_4;
     QPushButton *ConfirmButton;
     QWidget *layoutWidget4;
@@ -290,7 +291,10 @@ public:
         pushButton->setGeometry(QRect(130, 250, 121, 24));
         AddButton = new QPushButton(page_3);
         AddButton->setObjectName("AddButton");
-        AddButton->setGeometry(QRect(90, 290, 61, 31));
+        AddButton->setGeometry(QRect(10, 330, 61, 31));
+        BackUp_Button = new QPushButton(page_3);
+        BackUp_Button->setObjectName("BackUp_Button");
+        BackUp_Button->setGeometry(QRect(150, 290, 80, 24));
         stackedWidget->addWidget(page_3);
         page_4 = new QWidget();
         page_4->setObjectName("page_4");
@@ -375,7 +379,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -401,6 +405,7 @@ public:
         Edit_Button->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         pushButton->setText(QCoreApplication::translate("MainWindow", "Read", nullptr));
         AddButton->setText(QCoreApplication::translate("MainWindow", "Add file", nullptr));
+        BackUp_Button->setText(QCoreApplication::translate("MainWindow", "ROLLBACK", nullptr));
         ConfirmButton->setText(QCoreApplication::translate("MainWindow", "Confirm", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Filename", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "\320\241\320\276\320\264\320\265\321\200\320\266\320\260\320\275\320\270\320\265", nullptr));

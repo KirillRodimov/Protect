@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->adminLabel->hide();
     ui->Runbut->hide();
     ui->AddButton->hide();
+    ui->BackUp_Button->hide();
 
     ui->stackedWidget->setCurrentIndex(0);
     connect(ui->RegButton, &QPushButton::clicked, this, [=](){
@@ -308,10 +309,10 @@ void MainWindow::on_Edit_Button_clicked()
     ui->Filename_label->setText(Ename_file);
 
 
-    QString folderPath = "Logs"; // Имя папки в проекте
+    QString folderPath = "Logs";
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
 
@@ -357,12 +358,13 @@ void MainWindow::on_Edit_Button_clicked()
         else
         {
             QMessageBox::warning(this, "Ошибка", "Файл был изменен извне");
+            ui->BackUp_Button->show();
             return;
         }
     }
     ui->stackedWidget->setCurrentIndex(4);
     //Создание копии
-    string fname_for_copy = Ename_file.toStdString() + ".txt";
+    string fname_for_copy = Ename_file.toStdString();
     QString fileNameQtforcopy = QString::fromStdString(fname_for_copy);
     bool copy = createTimestampedCopyFile(fileNameQtforcopy);
     if (copy == 1)
@@ -377,12 +379,10 @@ void MainWindow::on_Edit_Button_clicked()
 
 void MainWindow::on_Save_pushButton_clicked()
 {
-    //ui->stackedWidget->setCurrentIndex(2);
-    QString folderPath = "Logs"; // Имя папки в проекте
-    //QString fileName = "output.txt"; // Имя файла
+    QString folderPath = "Logs";
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
     QFile file(filePath);
@@ -390,14 +390,10 @@ void MainWindow::on_Save_pushButton_clicked()
     string fn = Ename_file.toStdString();
     string cont;
 
-    //encrypt_file()
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
         out << ui->Edit_textEdit->toPlainText();
-        //QString content;
-        //ui->Edit_textEdit->setPlainText(content);
-        //cont = content.toStdString();
         file.close();
     }
     QString content = ui->Edit_textEdit->toPlainText();
@@ -451,5 +447,61 @@ void MainWindow::on_ButtonBack_clicked()
 void MainWindow::on_CopyButton_clicked()
 {
     QMessageBox::information(this, "Успех", "Вы успешно скопировали файл");
+}
+
+
+void MainWindow::on_BackUp_Button_clicked()
+{
+    checkFileAccess("Fa_copy.secretextension");
+    //Read copy
+    QString folderPath = "Logs";
+
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
+
+    QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + "_copy.secretextension");
+
+
+    QFile file(filePath);
+    QString content;
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        content = in.readAll();
+        qDebug() << "BACKUP Прочитано содержимое длиной:" << content.length() << "символов";
+        file.close();
+    }
+
+    cout << "CONTENT BACKUP " << content.toStdString() << endl;
+
+    //WRITE
+    QString WfolderPath = "Logs";
+
+    QDir WprojectDir = QDir::current();
+    WprojectDir.mkpath(WfolderPath);
+
+    QString WfilePath = projectDir.absoluteFilePath(WfolderPath + QDir::separator() + Ename_file + ".txt");
+    QFile Wfile(WfilePath);
+    string wfp = WfilePath.toStdString();
+    string wfn = Ename_file.toStdString();
+    string write_text;
+
+    if (Wfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&Wfile);
+        out << content;
+        //QString content;
+        //ui->Edit_textEdit->setPlainText(content);
+        //cont = content.toStdString();
+        Wfile.close();
+    }
+    //QString content = ui->Edit_textEdit->toPlainText();
+    write_text = content.toStdString();
+    cout << write_text << " WRITE TEXT BACKUP" << endl;
+    string hash = generate_file_hash(&write_text, &wfn, &wfp);
+    savehash_to_db(&wfn, db, &hash);
+    QMessageBox::information(this, "Успех", "Вы успешно восстановили файл");
+    ui->BackUp_Button->hide();
+
 }
 

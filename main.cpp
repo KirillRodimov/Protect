@@ -32,34 +32,95 @@ std::hash<std::string> hasher;
 }
 */
 
+void checkFileAccess(const QString& fileName) {
+    QString filePath = "Logs/" + fileName;
+    QFile file(filePath);
+    QFileInfo fileInfo(filePath);
+
+    qDebug() << "=== ДИАГНОСТИКА ФАЙЛА ===";
+    qDebug() << "Полный путь:" << filePath;
+    qDebug() << "Существует ли файл?" << fileInfo.exists();
+    qDebug() << "Размер файла:" << fileInfo.size() << "байт";
+    qDebug() << "Расширение:" << fileInfo.suffix();
+
+    // Пробуем открыть разными способами
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "УСПЕХ: Файл открыт в текстовом режиме";
+        file.close();
+    } else {
+        qDebug() << "ОШИБКА текстового режима:" << file.errorString();
+    }
+
+    // Пробуем бинарный режим (часто решает проблему)
+    if (file.open(QIODevice::ReadOnly)) {
+        qDebug() << "УСПЕХ: Файл открыт в бинарном режиме";
+        QByteArray data = file.read(100); // Читаем первые 100 байт
+        qDebug() << "Первые 100 байт (hex):" << data.toHex();
+        qDebug() << "Первые 100 байт (ascii):" << QString(data).left(100);
+        file.close();
+    } else {
+        qDebug() << "ОШИБКА бинарного режима:" << file.errorString();
+    }
+    qDebug() << "========================";
+}
+
 bool createTimestampedCopyFile(const QString& originalFileName)
 {
-    QString originalPath = "Logs/" + originalFileName;
+    QString originalPath = "Logs/" + originalFileName + ".txt";
     QFile originalFile(originalPath);
+
 
     if (!originalFile.exists()) {
         return false;
     }
 
-    QFileInfo fileInfo(originalFileName);
+    QFileInfo fileInfo(originalFileName + ".txt");
     QString baseName = fileInfo.completeBaseName();
     QString suffix = fileInfo.suffix();
 
     cout << suffix.toStdString() << " SUFFIX" << endl;
 
-    // Генерируем имя с меткой времени
-    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
-    QString newFileName;
+    //QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+    QString backupFileName;
 
-    if (suffix.isEmpty()) {
-        newFileName = baseName + "_copy_" + timestamp;
-    } else {
-        newFileName = baseName + "_copy_" + timestamp + "." + ".secretextension";
+    if (suffix.isEmpty())
+    {
+        backupFileName = baseName + "_copy";
+    }
+    else
+    {
+        backupFileName = baseName + "_copy" + ".secretextension";
     }
 
-    QString newPath = "Logs/" + newFileName;
+    QString backupPath = "Logs/" + backupFileName;
+    QFile backupFile(backupPath);
 
-    return originalFile.copy(newPath);
+    if (backupFile.exists())
+    {
+        if (!backupFile.remove())
+        {
+            qDebug() << "Ошибка: не удалось удалить старую копию" << backupPath;
+            qDebug() << "Причина:" << backupFile.errorString();
+            return false;
+        }
+        qDebug() << "Старая копия удалена:" << backupPath;
+    }
+
+    if (originalFile.copy(backupPath))
+    {
+        qDebug() << "Резервная копия создана:";
+        qDebug() << "  Оригинал: " << originalPath;
+        qDebug() << "  Копия:    " << backupPath;
+        qDebug() << "  Размер:   " << originalFile.size() << "байт";
+        return true;
+    }
+    else
+    {
+        qDebug() << "Ошибка создания копии";
+        qDebug() << "Причина:" << originalFile.errorString();
+        return false;
+    }
+
 }
 
 
@@ -80,11 +141,9 @@ string check_hash(string* truehash, string* filename, sqlite3 *db)
     int rc = 0;
     string nottruehash;
     char buf[1024];
-    //snprintf(buf, sizeof(buf),"SELECT * FROM Files WHERE File_name = '%s' AND File_hash = '%s'", filename->c_str(), truehash->c_str());
     snprintf(buf, sizeof(buf),"SELECT File_hash FROM Files WHERE File_name = '%s'", filename->c_str());
 
     rc = sqlite3_exec(db, buf, callback_hashfile,(void*) &nottruehash, &err);
-    //cout << "Hi " << rc <<endl;
     if (rc != SQLITE_OK )
     {
         cout << "SQL error: get files" << err <<endl;
@@ -493,5 +552,6 @@ int main(int argc, char *argv[])
     QString abcd = "First";
     QString out = generate_hash(abcd.toStdString());
     cout << out.toStdString() << " -- out" << endl;
+
     return a.exec();
 }

@@ -56,6 +56,8 @@ private slots:
 
     void on_CopyButton_clicked();
 
+    void on_BackUp_Button_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
@@ -134,3 +136,4 @@ string generate_file_hash(string* content, string* filename ,string* path);
 int savehash_to_db(string* filename, sqlite3 *db, string* hash);
 string check_hash(string* truehash, string* filename, sqlite3 *db);
 bool createTimestampedCopyFile(const QString& originalFileName);
+void checkFileAccess(const QString& fileName);
