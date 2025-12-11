@@ -310,14 +310,13 @@ void MainWindow::on_Edit_Button_clicked()
 {
     ui->Filename_label->setText(Ename_file);
 
-    //ui->stackedWidget->setCurrentIndex(4);
     ui->Filename_label->setText(Ename_file);
 
 
-    QString folderPath = "Logs"; // Имя папки в проекте
+    QString folderPath = "Logs";
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
     OpenfilePath = filePath;
@@ -336,15 +335,12 @@ void MainWindow::on_Edit_Button_clicked()
     pOpenfile = new QFile (filePath);
 
 
-    //////////ПОТОМ ПОМЕНЯТЬ
-    //SimpleCrypt crypto("123321KEY");
     string fn = Ename_file.toStdString();
     string dbkey = take_modif(&fn, db);
 
 
     if (pOpenfile->open(QIODevice::ReadWrite | QIODevice::Text))
     {
-        LockFile((HANDLE) _get_osfhandle(pOpenfile->handle()), 0, 0, -1, -1);
         if (dbkey.empty() == 1)
         {
             QTextStream in(pOpenfile);
@@ -363,8 +359,6 @@ void MainWindow::on_Edit_Button_clicked()
             cout << savedEncryptedData.toStdString() << " SED" << endl;
             QString original_text_from_file = crypto.decryptFromByteArray(savedEncryptedData);
             cout << original_text_from_file.toStdString() << " ORIGIN" << endl;
-            //?
-            //cont = content.toStdString();
             cont = original_text_from_file.toStdString();
             qDebug() << "Прочитано содержимое длиной :" << content.length() << " символов";
             ui->Edit_textEdit->setPlainText(original_text_from_file);
@@ -372,7 +366,6 @@ void MainWindow::on_Edit_Button_clicked()
         }
         //file.close();
     }
-    //string fn = Ename_file.toStdString();
     string fp = filePath.toStdString();
 
     string hash_true = generate_file_hash(&cont, &fn, &fp);
@@ -406,7 +399,7 @@ void MainWindow::on_Edit_Button_clicked()
     {
         cout << "COPY OF FILE: " << Ename_file.toStdString() << " CREATED" << endl;
     }
-
+    LockFile((HANDLE) _get_osfhandle(pOpenfile->handle()), 0, 0, -1, -1);
 
     return;
 }
@@ -414,12 +407,12 @@ void MainWindow::on_Edit_Button_clicked()
 
 void MainWindow::on_Save_pushButton_clicked()
 {
-    //ui->stackedWidget->setCurrentIndex(2);
-    QString folderPath = "Logs"; // Имя папки в проекте
-    //QString fileName = "output.txt"; // Имя файла
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+    QString folderPath = "Logs";
+
+
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
     QFile file(filePath);
@@ -433,7 +426,7 @@ void MainWindow::on_Save_pushButton_clicked()
     cout << skey << "  SKEY" << endl;
     SimpleCrypt crypto(skey.c_str());
     insert_key(&skey, db, &fn);
-    //SimpleCrypt crypto("123321KEY");
+
 
     QByteArray encryptedPassword = crypto.encryptToByteArray(ui->Edit_textEdit->toPlainText());
     if (pOpenfile != nullptr)
@@ -446,11 +439,7 @@ void MainWindow::on_Save_pushButton_clicked()
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
-        //out << ui->Edit_textEdit->toPlainText();
         out << encryptedPassword;
-        //QString content;
-        //ui->Edit_textEdit->setPlainText(content);
-        //cont = content.toStdString();
         file.close();
     }
     QString content = ui->Edit_textEdit->toPlainText();

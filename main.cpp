@@ -74,32 +74,61 @@ int insert_key(string* key, sqlite3 *db, string* filename)
 
 bool createTimestampedCopyFile(const QString& originalFileName)
 {
-    QString originalPath = "Logs/" + originalFileName;
+    QString originalPath = "Logs/" + originalFileName + ".txt";
     QFile originalFile(originalPath);
+
 
     if (!originalFile.exists()) {
         return false;
     }
 
-    QFileInfo fileInfo(originalFileName);
+    QFileInfo fileInfo(originalFileName + ".txt");
     QString baseName = fileInfo.completeBaseName();
     QString suffix = fileInfo.suffix();
 
     cout << suffix.toStdString() << " SUFFIX" << endl;
 
-    // Генерируем имя с меткой времени
-    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
-    QString newFileName;
+    //QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+    QString backupFileName;
 
-    if (suffix.isEmpty()) {
-        newFileName = baseName + "_copy_" + timestamp;
-    } else {
-        newFileName = baseName + "_copy_" + timestamp + "." + ".secretextension";
+    if (suffix.isEmpty())
+    {
+        backupFileName = baseName + "_copy";
+    }
+    else
+    {
+        backupFileName = baseName + "_copy" + ".secretextension";
     }
 
-    QString newPath = "Logs/" + newFileName;
+    QString backupPath = "Logs/" + backupFileName;
+    QFile backupFile(backupPath);
 
-    return originalFile.copy(newPath);
+    if (backupFile.exists())
+    {
+        if (!backupFile.remove())
+        {
+            qDebug() << "Ошибка: не удалось удалить старую копию" << backupPath;
+            qDebug() << "Причина:" << backupFile.errorString();
+            return false;
+        }
+        qDebug() << "Старая копия удалена:" << backupPath;
+    }
+
+    if (originalFile.copy(backupPath))
+    {
+        qDebug() << "Резервная копия создана:";
+        qDebug() << "  Оригинал: " << originalPath;
+        qDebug() << "  Копия:    " << backupPath;
+        qDebug() << "  Размер:   " << originalFile.size() << "байт";
+        return true;
+    }
+    else
+    {
+        qDebug() << "Ошибка создания копии";
+        qDebug() << "Причина:" << originalFile.errorString();
+        return false;
+    }
+
 }
 
 
