@@ -269,10 +269,10 @@ void MainWindow::on_Edit_Button_clicked()
     ui->Filename_label->setText(Ename_file);
 
 
-    QString folderPath = "Logs"; // Имя папки в проекте
+    QString folderPath = "Logs";
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
 
@@ -303,11 +303,11 @@ void MainWindow::on_Edit_Button_clicked()
 void MainWindow::on_Save_pushButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
-    QString folderPath = "Logs"; // Имя папки в проекте
-    //QString fileName = "output.txt"; // Имя файла
+    QString folderPath = "Logs";
 
-    QDir projectDir = QDir::current(); // Получаем текущую директорию проекта
-    projectDir.mkpath(folderPath); // Создаем папку, если её нет[citation:2]
+
+    QDir projectDir = QDir::current();
+    projectDir.mkpath(folderPath);
 
     QString filePath = projectDir.absoluteFilePath(folderPath + QDir::separator() + Ename_file + ".txt");
     QFile file(filePath);
